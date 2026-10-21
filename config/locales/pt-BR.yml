@@ -1,0 +1,17 @@
+pt-BR:
+  activerecord:
+    models:
+      current_account: Lançamento
+      user: Usuário
+    attributes:
+      current_account:
+        cash_account_id: Conta
+        cost_id: Categoria
+        type_launche: Tipo
+        date_ocurrence: Data
+        price: Valor
+        historic: Histórico
+      user:
+        email_address: E-mail
+        password: Senha
+        password_confirmation: Confirmação da senha

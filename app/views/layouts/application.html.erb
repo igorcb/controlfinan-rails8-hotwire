@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title><%= content_for(:title) || "ControlFinan" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="ControlFinan">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+  </head>
+
+  <body class="min-h-screen bg-slate-50 text-slate-900">
+    <header class="border-b border-slate-200 bg-white">
+      <nav class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+        <%= link_to "ControlFinan", root_path, class: "text-lg font-semibold text-emerald-700" %>
+        <% if authenticated? %>
+          <div class="flex items-center gap-4 text-sm">
+            <%= link_to "Conta Corrente", current_accounts_path, class: "link" %>
+            <span class="hidden text-slate-500 sm:inline"><%= Current.user.email_address %></span>
+            <%= button_to "Sair", session_path, method: :delete, class: "link" %>
+          </div>
+        <% end %>
+      </nav>
+    </header>
+
+    <main class="mx-auto max-w-5xl px-4 py-6">
+      <% if notice %>
+        <p class="mb-4 rounded-md bg-emerald-50 px-4 py-3 text-sm text-emerald-800"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+        <p class="mb-4 rounded-md bg-red-50 px-4 py-3 text-sm text-red-800"><%= alert %></p>
+      <% end %>
+
+      <%= yield %>
+    </main>
+  </body>
+</html>

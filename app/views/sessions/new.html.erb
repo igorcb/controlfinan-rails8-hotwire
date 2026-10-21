@@ -1,0 +1,22 @@
+<% content_for :title, "Entrar" %>
+
+<div class="mx-auto max-w-sm">
+  <h1 class="mb-6 text-2xl font-semibold">Entrar</h1>
+
+  <%= form_with url: session_path, class: "card space-y-4" do |form| %>
+    <div>
+      <%= form.label :email_address, "E-mail", class: "label" %>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", value: params[:email_address], class: "input" %>
+    </div>
+    <div>
+      <%= form.label :password, "Senha", class: "label" %>
+      <%= form.password_field :password, required: true, autocomplete: "current-password", maxlength: 72, class: "input" %>
+    </div>
+    <%= form.submit "Entrar", class: "btn-primary w-full" %>
+  <% end %>
+
+  <div class="mt-4 flex justify-between text-sm">
+    <%= link_to "Criar conta", new_registration_path, class: "link" %>
+    <%= link_to "Esqueceu a senha?", new_password_path, class: "link" %>
+  </div>
+</div>

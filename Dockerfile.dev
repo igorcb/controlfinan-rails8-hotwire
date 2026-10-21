@@ -1,0 +1,23 @@
+# Development image. Production uses Dockerfile.
+ARG RUBY_VERSION=3.4.11
+FROM docker.io/library/ruby:$RUBY_VERSION-slim
+
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev libvips curl pkg-config postgresql-client nodejs npm && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives && \
+    npm install -g corepack && corepack enable
+
+ARG UID=1000
+ARG GID=1000
+RUN groupadd --gid $GID rails && \
+    useradd rails --uid $UID --gid $GID --create-home --shell /bin/bash && \
+    mkdir -p /usr/local/bundle && chown rails:rails /usr/local/bundle
+
+ENV BUNDLE_PATH=/usr/local/bundle \
+    COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+
+USER rails
+WORKDIR /rails
+
+EXPOSE 3000
+CMD ["bash", "-c", "bundle install && yarn install && bin/rails db:prepare && bin/dev"]

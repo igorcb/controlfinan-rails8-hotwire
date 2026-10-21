@@ -1,0 +1,13 @@
+<tr id="<%= dom_id(current_account) %>" class="hover:bg-slate-50">
+  <td class="whitespace-nowrap px-4 py-3"><%= l(current_account.date_ocurrence) %></td>
+  <td class="px-4 py-3"><%= current_account.name_account %></td>
+  <td class="px-4 py-3"><%= current_account.name_cost %></td>
+  <td class="px-4 py-3 text-slate-600"><%= current_account.historic %></td>
+  <td class="whitespace-nowrap px-4 py-3 text-right font-medium <%= current_account.credito? ? "text-emerald-700" : "text-red-700" %>">
+    <%= number_to_currency(current_account.signed_price) %>
+  </td>
+  <td class="whitespace-nowrap px-4 py-3 text-right">
+    <%= link_to "Ver", current_account, class: "link" %>
+    <%= link_to "Editar", edit_current_account_path(current_account), class: "link ml-2" %>
+  </td>
+</tr>

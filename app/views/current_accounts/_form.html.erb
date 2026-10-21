@@ -1,0 +1,55 @@
+<%= form_with model: current_account, class: "card space-y-4" do |form| %>
+  <% if current_account.errors.any? %>
+    <div class="rounded-md bg-red-50 px-4 py-3 text-sm text-red-800">
+      <ul class="list-inside list-disc">
+        <% current_account.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div>
+      <%= form.label :cash_account_id, class: "label" %>
+      <%= form.select :cash_account_id, CurrentAccount::CASH_ACCOUNTS.invert, { prompt: "Selecione" }, class: "input" %>
+    </div>
+
+    <div>
+      <%= form.label :cost_id, class: "label" %>
+      <%= form.select :cost_id, CurrentAccount::COSTS.invert, { prompt: "Selecione" }, class: "input" %>
+    </div>
+
+    <div>
+      <span class="label"><%= CurrentAccount.human_attribute_name(:type_launche) %></span>
+      <div class="flex gap-6 py-2 text-sm">
+        <label class="flex items-center gap-2">
+          <%= form.radio_button :type_launche, :credito %> Crédito
+        </label>
+        <label class="flex items-center gap-2">
+          <%= form.radio_button :type_launche, :debito %> Débito
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :date_ocurrence, class: "label" %>
+      <%= form.date_field :date_ocurrence, class: "input" %>
+    </div>
+
+    <div>
+      <%= form.label :price, class: "label" %>
+      <%= form.number_field :price, step: 0.01, min: 0.01, placeholder: "150.00", class: "input" %>
+    </div>
+
+    <div>
+      <%= form.label :historic, class: "label" %>
+      <%= form.text_field :historic, class: "input" %>
+    </div>
+  </div>
+
+  <div class="flex gap-3">
+    <%= form.submit "Salvar", class: "btn-primary" %>
+    <%= link_to "Cancelar", current_account.persisted? ? current_account : current_accounts_path, class: "btn-secondary" %>
+  </div>
+<% end %>

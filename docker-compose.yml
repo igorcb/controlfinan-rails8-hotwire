@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bash -c "rm -f tmp/pids/server.pid && bundle install && yarn install && bin/rails db:prepare && bin/dev"
+    environment:
+      DATABASE_URL: postgresql://app:app@db:5432
+      BINDING: 0.0.0.0
+    ports:
+      - "3001:3000"
+    volumes:
+      - .:/rails
+      - bundle:/usr/local/bundle
+    depends_on:
+      - db
+    tty: true
+
+volumes:
+  db_data:
+  bundle:

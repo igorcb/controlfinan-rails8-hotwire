@@ -1,0 +1,39 @@
+<% content_for :title, "Lançamento" %>
+
+<h1 class="mb-6 text-2xl font-semibold">Lançamento</h1>
+
+<div class="card">
+  <dl class="grid gap-4 text-sm sm:grid-cols-2">
+    <div>
+      <dt class="text-slate-500">Data</dt>
+      <dd class="font-medium"><%= l(@current_account.date_ocurrence) %></dd>
+    </div>
+    <div>
+      <dt class="text-slate-500">Tipo</dt>
+      <dd class="font-medium"><%= @current_account.type_launche_name %></dd>
+    </div>
+    <div>
+      <dt class="text-slate-500">Conta</dt>
+      <dd class="font-medium"><%= @current_account.name_account %></dd>
+    </div>
+    <div>
+      <dt class="text-slate-500">Categoria</dt>
+      <dd class="font-medium"><%= @current_account.name_cost %></dd>
+    </div>
+    <div>
+      <dt class="text-slate-500">Valor</dt>
+      <dd class="font-medium <%= @current_account.credito? ? "text-emerald-700" : "text-red-700" %>"><%= number_to_currency(@current_account.signed_price) %></dd>
+    </div>
+    <div>
+      <dt class="text-slate-500">Histórico</dt>
+      <dd class="font-medium"><%= @current_account.historic.presence || "—" %></dd>
+    </div>
+  </dl>
+
+  <div class="mt-6 flex flex-wrap gap-3">
+    <%= link_to "Editar", edit_current_account_path(@current_account), class: "btn-primary" %>
+    <%= link_to "Voltar", current_accounts_path, class: "btn-secondary" %>
+    <%= button_to "Excluir", @current_account, method: :delete, class: "btn-danger",
+          form: { data: { turbo_confirm: "Excluir este lançamento?" } } %>
+  </div>
+</div>
