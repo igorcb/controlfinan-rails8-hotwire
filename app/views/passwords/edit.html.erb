@@ -6,7 +6,7 @@
   <%= form_with url: password_path(params[:token]), method: :put, class: "card space-y-4" do |form| %>
     <div>
       <%= form.label :password, "Nova senha", class: "label" %>
-      <%= form.password_field :password, required: true, autocomplete: "new-password", minlength: 8, maxlength: 72, class: "input" %>
+      <%= form.password_field :password, required: true, autocomplete: "new-password", minlength: 6, maxlength: 72, class: "input" %>
     </div>
     <div>
       <%= form.label :password_confirmation, "Repita a nova senha", class: "label" %>

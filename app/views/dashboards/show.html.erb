@@ -1,0 +1,45 @@
+<% content_for :title, "Dashboard" %>
+
+<div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-2xl font-semibold">Dashboard</h1>
+    <div class="mt-2 flex items-center gap-3 text-sm">
+      <%= link_to "←", dashboard_path(month: @month.prev_month.strftime("%Y-%m")), class: "btn-secondary px-3 py-1", aria: { label: "Mês anterior" } %>
+      <span class="font-medium"><%= l(@month, format: "%B de %Y").upcase_first %></span>
+      <%= link_to "→", dashboard_path(month: @month.next_month.strftime("%Y-%m")), class: "btn-secondary px-3 py-1", aria: { label: "Próximo mês" } %>
+    </div>
+  </div>
+
+  <div class="flex w-full flex-wrap items-end gap-3 sm:w-auto">
+    <%= form_with url: current_accounts_path, method: :get, class: "flex flex-1 items-end gap-2" do |form| %>
+      <div class="min-w-0 flex-1">
+        <%= form.label :date, "Consultar saldo diário", class: "label" %>
+        <%= form.date_field :date, value: Date.current, class: "input" %>
+      </div>
+      <%= form.submit "Consultar", name: nil, class: "btn-secondary" %>
+    <% end %>
+    <%= link_to "Novo lançamento", new_current_account_path, class: "btn-primary hidden sm:inline-flex" %>
+  </div>
+</div>
+
+<div data-controller="tabs" class="card p-4 sm:p-6">
+  <div role="tablist" class="-mx-2 mb-4 grid grid-cols-2 gap-2 border-b border-slate-200 px-2 pb-3 sm:mx-0 sm:flex sm:px-0">
+    <% ["Saldo Diário", "Saldo Mensal"].each do |label| %>
+      <button type="button" role="tab" data-tabs-target="tab" data-action="tabs#select"
+              class="rounded-md px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 aria-selected:bg-emerald-600 aria-selected:text-white">
+        <%= label %>
+      </button>
+    <% end %>
+  </div>
+
+  <div data-tabs-target="panel">
+    <%= render "amounts_table", header: "Data", rows: @balance_by_day.transform_keys { |date| l(date) },
+          total_label: "Total do mês", total: @month_balance %>
+  </div>
+
+  <div data-tabs-target="panel" hidden>
+    <%= render "amounts_table", header: "Item",
+          rows: { "Corridas" => @rides_balance }.merge(CurrentAccount::RIDE_EXPENSES.to_h { |id, name| [ name, -@ride_expenses.fetch(id, 0) ] }),
+          total_label: "Saldo do mês", total: @rides_net %>
+  </div>
+</div>

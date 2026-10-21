@@ -1,0 +1,25 @@
+<table class="min-w-full divide-y divide-slate-200 text-sm">
+  <thead class="text-left text-xs font-medium uppercase tracking-wide text-slate-500">
+    <tr>
+      <th class="px-2 py-2 sm:px-4"><%= header %></th>
+      <th class="px-2 py-2 sm:px-4 text-right">Valor</th>
+    </tr>
+  </thead>
+  <tbody class="divide-y divide-slate-100">
+    <% rows.each do |label, amount| %>
+      <tr>
+        <td class="px-2 py-2 sm:px-4"><%= label %></td>
+        <td class="px-2 py-2 sm:px-4 text-right <%= amount.negative? ? "text-red-700" : "text-emerald-700" %>"><%= number_to_currency(amount) %></td>
+      </tr>
+    <% end %>
+    <% if rows.empty? %>
+      <tr><td colspan="2" class="px-4 py-4 text-center text-slate-500">Nenhum lançamento no período.</td></tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr class="border-t-2 border-slate-200 font-semibold">
+      <td class="px-2 py-2 sm:px-4"><%= total_label %></td>
+      <td class="px-2 py-2 sm:px-4 text-right <%= total.negative? ? "text-red-700" : "text-emerald-700" %>"><%= number_to_currency(total) %></td>
+    </tr>
+  </tfoot>
+</table>

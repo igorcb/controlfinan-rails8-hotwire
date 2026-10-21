@@ -41,10 +41,26 @@ class CurrentAccount < ApplicationRecord
 
   scope :ordered, -> { order(date_ocurrence: :desc, id: :desc) }
   scope :on_date, ->(date) { where(date_ocurrence: date) }
+  scope :in_month, ->(date) { where(date_ocurrence: date.all_month) }
+  scope :rides, -> { where(cost_id: RIDES) }
+
+  RIDES = 6
+  # Ride expenses discounted from rides in the monthly balance (legacy dashboard rule).
+  RIDE_EXPENSES = { 0 => "Combustível", 8 => "Lavagem", 7 => "Telefone" }.freeze
 
   # Credits minus debits: the sign comes from type_launche (-1 or 1).
   def self.balance
     sum("price * type_launche")
+  end
+
+  # { date => balance }, most recent first
+  def self.balance_by_day
+    group(:date_ocurrence).order(date_ocurrence: :desc).sum("price * type_launche")
+  end
+
+  # { cost_id => sum of price }, only for the given categories
+  def self.total_by_cost(cost_ids)
+    where(cost_id: cost_ids).group(:cost_id).sum(:price)
   end
 
   def name_account

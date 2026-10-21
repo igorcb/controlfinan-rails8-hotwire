@@ -22,7 +22,7 @@ class PasswordsController < ApplicationController
       @user.sessions.destroy_all
       redirect_to new_session_path, notice: "Senha redefinida."
     else
-      redirect_to edit_password_path(params[:token]), alert: "As senhas não conferem ou têm menos de 8 caracteres."
+      redirect_to edit_password_path(params[:token]), alert: "As senhas não conferem ou têm menos de 6 caracteres."
     end
   end
 
