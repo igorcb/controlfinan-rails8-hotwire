@@ -9,27 +9,19 @@
     </div>
   <% end %>
 
+  <div class="grid grid-cols-2 gap-2" role="radiogroup" aria-label="<%= CurrentAccount.human_attribute_name(:type_launche) %>">
+    <label class="flex cursor-pointer items-center justify-center rounded-md border border-slate-300 py-3 font-medium text-slate-600 has-checked:border-red-600 has-checked:bg-red-600 has-checked:text-white">
+      <%= form.radio_button :type_launche, :debito, class: "sr-only" %> Débito
+    </label>
+    <label class="flex cursor-pointer items-center justify-center rounded-md border border-slate-300 py-3 font-medium text-slate-600 has-checked:border-emerald-600 has-checked:bg-emerald-600 has-checked:text-white">
+      <%= form.radio_button :type_launche, :credito, class: "sr-only" %> Crédito
+    </label>
+  </div>
+
   <div class="grid gap-4 sm:grid-cols-2">
     <div>
-      <%= form.label :cash_account_id, class: "label" %>
-      <%= form.select :cash_account_id, CurrentAccount::CASH_ACCOUNTS.invert, { prompt: "Selecione" }, class: "input" %>
-    </div>
-
-    <div>
-      <%= form.label :cost_id, class: "label" %>
-      <%= form.select :cost_id, CurrentAccount::COSTS.invert, { prompt: "Selecione" }, class: "input" %>
-    </div>
-
-    <div>
-      <span class="label"><%= CurrentAccount.human_attribute_name(:type_launche) %></span>
-      <div class="flex gap-6 py-2 text-sm">
-        <label class="flex items-center gap-2">
-          <%= form.radio_button :type_launche, :credito %> Crédito
-        </label>
-        <label class="flex items-center gap-2">
-          <%= form.radio_button :type_launche, :debito %> Débito
-        </label>
-      </div>
+      <%= form.label :price, class: "label" %>
+      <%= form.number_field :price, step: 0.01, min: 0.01, placeholder: "0,00", inputmode: "decimal", autofocus: current_account.new_record?, class: "input text-lg font-semibold" %>
     </div>
 
     <div>
@@ -38,18 +30,23 @@
     </div>
 
     <div>
-      <%= form.label :price, class: "label" %>
-      <%= form.number_field :price, step: 0.01, min: 0.01, placeholder: "150.00", class: "input" %>
+      <%= form.label :cost_id, class: "label" %>
+      <%= form.select :cost_id, CurrentAccount::COSTS.invert, { prompt: "Selecione" }, class: "input" %>
     </div>
 
     <div>
+      <%= form.label :cash_account_id, class: "label" %>
+      <%= form.select :cash_account_id, CurrentAccount::CASH_ACCOUNTS.invert, { prompt: "Selecione" }, class: "input" %>
+    </div>
+
+    <div class="sm:col-span-2">
       <%= form.label :historic, class: "label" %>
       <%= form.text_field :historic, class: "input" %>
     </div>
   </div>
 
-  <div class="flex gap-3">
-    <%= form.submit "Salvar", class: "btn-primary" %>
-    <%= link_to "Cancelar", current_account.persisted? ? current_account : current_accounts_path, class: "btn-secondary" %>
+  <div class="flex flex-col-reverse gap-3 sm:flex-row">
+    <%= link_to "Cancelar", current_account.persisted? ? current_account : current_accounts_path, class: "btn-secondary py-3 sm:py-2" %>
+    <%= form.submit "Salvar", class: "btn-primary py-3 sm:order-first sm:py-2" %>
   </div>
 <% end %>
