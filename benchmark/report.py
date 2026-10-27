@@ -14,8 +14,9 @@ APPS = {
     "go": "Go 1.25 (net/http + pgx)",
     "java": "Java 21 + Spring Boot 3.5 (Tomcat)",
     "rust": "Rust + Axum 0.8 (Tokio)",
+    "csharp": "C# + ASP.NET Core 9 (Kestrel)",
 }
-NAMES = {"rails": "Rails", "django": "Django", "laravel": "Laravel", "go": "Go", "java": "Java", "rust": "Rust"}
+NAMES = {"rails": "Rails", "django": "Django", "laravel": "Laravel", "go": "Go", "java": "Java", "rust": "Rust", "csharp": "C#"}
 PAGES = {
     "lista": "Conta Corrente (30 itens + saldo)",
     "dia": "Saldo do dia (filtro)",
@@ -40,6 +41,7 @@ CODE = {
     "java": (ROOT.parent / "controlfinan-java", ["src/main/java/**/*.java", "src/main/resources/templates/**/*.html",
              "src/main/resources/static/js/*.js", "assets/*.css", "src/main/resources/*.properties"], []),
     "rust": (ROOT.parent / "controlfinan-rust", ["src/*.rs", "templates/*.html", "static/js/*.js", "assets/*.css"], []),
+    "csharp": (ROOT.parent / "controlfinan-csharp", ["src/**/*.cs", "src/Views/**/*.cshtml", "src/wwwroot/js/*.js", "assets/*.css"], ["/obj/", "/bin/"]),
 }
 TESTS = {
     "rails": (ROOT, ["test/**/*.rb", "spec/**/*.rb"]),
@@ -48,6 +50,7 @@ TESTS = {
     "go": (ROOT.parent / "controlfinan-go", ["app/*_test.go"]),
     "java": (ROOT.parent / "controlfinan-java", ["src/test/java/**/*.java"]),
     "rust": (ROOT.parent / "controlfinan-rust", ["tests/*.rs"]),
+    "csharp": (ROOT.parent / "controlfinan-csharp", ["tests/*.cs"]),
 }
 
 
@@ -106,7 +109,7 @@ def main():
     out = ["# Benchmark: ControlFinan em " + " x ".join(NAMES[a] for a in apps), ""]
     out += [
         "Mesmo app (paridade de telas e regras), mesmos dados, modo produção.",
-        "Puma e Gunicorn: 2 processos × 5 threads (com GVL/GIL, até 2 requisições usam CPU ao mesmo tempo); Laravel Octane: 2 workers, um por CPU; Go: goroutines em 2 threads (GOMAXPROCS = limite de CPU); Java: Tomcat com o pool padrão de threads; Rust: Tokio com uma thread por CPU.",
+        "Puma e Gunicorn: 2 processos × 5 threads (com GVL/GIL, até 2 requisições usam CPU ao mesmo tempo); Laravel Octane: 2 workers, um por CPU; Go: goroutines em 2 threads (GOMAXPROCS = limite de CPU); Java: Tomcat com o pool padrão de threads; Rust: Tokio com uma thread por CPU; C#: Kestrel com o pool padrão de threads.",
         "Cada app limitado a 2 CPUs e 1 GB de RAM, com o seu Postgres 16 (2 CPUs, 1 GB).",
         "Carga: k6 com 20 usuários simultâneos, logado de verdade. Antes de medir, cada app passa por 20 s de carga em cada tela (aquecimento, fora da conta); depois, por tela, 10 s de aquecimento + 30 s medidos.",
         "Os dados são carregados e analisados (`ANALYZE`) antes da medição.",

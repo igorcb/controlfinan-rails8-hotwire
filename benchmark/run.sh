@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# ControlFinan benchmark: Rails 8 + Hotwire (this repo) x Django x Laravel (Octane) x Go x Java x Rust.
-# Usage: ./benchmark/run.sh [apps...] (default: rails django laravel go java rust)
+# ControlFinan benchmark: Rails 8 + Hotwire (this repo) x Django x Laravel (Octane) x Go x Java x Rust x C#.
+# Usage: ./benchmark/run.sh [apps...] (default: rails django laravel go java rust csharp)
 # Needs this repo's dev database running (docker compose up db), which provides the shared data
 # (benchmark@exemplo.com and its entries), and the other apps cloned next to this repo:
-# ../controlfinan-django, ../controlfinan-laravel, ../controlfinan-go, ../controlfinan-java and ../controlfinan-rust.
+# ../controlfinan-django, ../controlfinan-laravel, ../controlfinan-go, ../controlfinan-java, ../controlfinan-rust and ../controlfinan-csharp.
 set -euo pipefail
 cd "$(dirname "$0")"
 RAILS_APP="$(cd .. && pwd)"
@@ -12,10 +12,11 @@ LARAVEL_APP="$(cd ../../controlfinan-laravel && pwd)"
 JAVA_APP="$(cd ../../controlfinan-java && pwd)"
 GO_APP="$(cd ../../controlfinan-go && pwd)"
 RUST_APP="$(cd ../../controlfinan-rust && pwd)"
-export RAILS_APP DJANGO_APP LARAVEL_APP JAVA_APP GO_APP RUST_APP
+CSHARP_APP="$(cd ../../controlfinan-csharp && pwd)"
+export RAILS_APP DJANGO_APP LARAVEL_APP JAVA_APP GO_APP RUST_APP CSHARP_APP
 RAILS_MASTER_KEY="$(cat "$RAILS_APP/config/master.key")"
 export RAILS_MASTER_KEY
-APPS=("${@:-rails django laravel go java rust}")
+APPS=("${@:-rails django laravel go java rust csharp}")
 read -r -a APPS <<< "${APPS[*]}"
 RESULTS=results
 mkdir -p "$RESULTS"
@@ -48,6 +49,7 @@ for app in "${APPS[@]}"; do
     go) port=8104; inner=8000; dbname=controlfinan_go ;;
     java) port=8105; inner=8000; dbname=controlfinan_java ;;
     rust) port=8106; inner=8000; dbname=controlfinan_rust ;;
+    csharp) port=8107; inner=8000; dbname=controlfinan_csharp ;;
   esac
   db="$app-db"
   echo "== $app"
