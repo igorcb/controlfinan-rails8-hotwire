@@ -110,3 +110,9 @@ docker compose exec web bundle exec rspec
 - Contas e categorias continuam fixas no código, e não em tabelas editáveis.
 - O e-mail de redefinição de senha só funciona com o envio de e-mails configurado (Action Mailer).
 - Os dados do legado ainda não foram importados. Os usuários vindos do Devise precisariam redefinir a senha.
+
+## Licença
+
+Distribuído sob a licença [MIT](LICENSE): você pode usar este código como base para o seu próprio app, alterar e distribuir à vontade.
+
+> Existe uma versão com recursos adicionais para motoristas de aplicativo (relatórios, importação de dados e outros), mantida **à parte** e **não** incluída neste repositório.
