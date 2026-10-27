@@ -111,6 +111,20 @@ docker compose exec web bundle exec rspec
 - O e-mail de redefinição de senha só funciona com o envio de e-mails configurado (Action Mailer).
 - Os dados do legado ainda não foram importados. Os usuários vindos do Devise precisariam redefinir a senha.
 
+## Benchmark
+
+O mesmo app foi escrito em seis linguagens, com paridade de telas e regras: Rails (este repositório), [Django](https://github.com/igorcb/controlfinan-django), [Laravel](https://github.com/igorcb/controlfinan-laravel), [Go](https://github.com/igorcb/controlfinan-go), [Java](https://github.com/igorcb/controlfinan-java) e [Rust](https://github.com/igorcb/controlfinan-rust). As seis foram medidas com os mesmos dados e os mesmos limites (2 CPUs e 1 GB de RAM por app, 20 usuários simultâneos).
+
+| Requisições por segundo | Rails | Django | Laravel | Go | Java | Rust |
+|---|---:|---:|---:|---:|---:|---:|
+| Conta Corrente (30 itens + saldo) | 120 | 96 | 128 | **137** | 98 | 104 |
+| Saldo do dia (filtro) | 247 | 188 | 254 | 2.509 | 211 | **2.763** |
+| Dashboard do mês | 186 | 152 | 251 | **2.074** | 225 | 787 |
+| API JSON (30 itens) | 304 | 267 | 238 | **4.934** | 837 | 2.956 |
+| Criar lançamento (POST) | 372 | 320 | 351 | **5.584** | 4.107 | 3.811 |
+
+O método, os recursos (memória, imagem e boot), as conclusões e as lições de medição estão em [benchmark/README.md](benchmark/README.md).
+
 ## Licença
 
 Distribuído sob a licença [MIT](LICENSE): você pode usar este código como base para o seu próprio app, alterar e distribuir à vontade.
