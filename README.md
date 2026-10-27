@@ -78,6 +78,15 @@ docker compose exec web bin/rails runner 'User.create!(email_address: "voce@emai
 | Parar | `docker compose down` |
 | Parar e apagar o banco | `docker compose down -v` |
 
+## Testes
+
+46 testes com **RSpec** e **FactoryBot** cobrindo os modelos (validações em pt-BR, saldo, saldo por dia, totais por categoria e token de redefinição de senha), as requisições (login, limite de 10 tentativas a cada 3 minutos, cadastro, redefinição de senha, lançamentos com filtro, paginação, JSON e isolamento entre usuários, e Dashboard) e o e-mail de redefinição de senha.
+
+```bash
+docker compose exec -e RAILS_ENV=test web bin/rails db:create db:schema:load   # só na primeira vez
+docker compose exec web bundle exec rspec
+```
+
 ## Estrutura
 
 - `app/models/current_account.rb`: o lançamento, com as contas, as categorias, as validações e os cálculos de saldo.
@@ -100,5 +109,4 @@ docker compose exec web bin/rails runner 'User.create!(email_address: "voce@emai
 
 - Contas e categorias continuam fixas no código, e não em tabelas editáveis.
 - O e-mail de redefinição de senha só funciona com o envio de e-mails configurado (Action Mailer).
-- Ainda não há testes automatizados.
 - Os dados do legado ainda não foram importados. Os usuários vindos do Devise precisariam redefinir a senha.
