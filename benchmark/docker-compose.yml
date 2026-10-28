@@ -1,4 +1,4 @@
-# ControlFinan in Rails 8 + Hotwire (this repo) x Django x Laravel (Octane) x Go x Java x Rust x C#, all in production mode with the same limits and the same data.
+# ControlFinan in Rails 8 + Hotwire (this repo) x Django x Laravel (Octane) x Go x Java x Rust x C# x Node.js x Elixir, all in production mode with the same limits and the same data.
 # Run with ./benchmark/run.sh (it reads the Rails master key from the Rails repo; nothing secret is stored here).
 x-db: &db
   image: postgres:16-alpine
@@ -48,6 +48,18 @@ services:
       POSTGRES_USER: app
       POSTGRES_PASSWORD: app
       POSTGRES_DB: controlfinan_csharp
+  node-db:
+    <<: *db
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: controlfinan_node
+  elixir-db:
+    <<: *db
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: controlfinan_elixir
 
   rails:
     build: ..
@@ -172,6 +184,40 @@ services:
       DB_POOL: 10
     ports: ["8107:8000"]
     depends_on: [csharp-db]
+
+  node:
+    build:
+      context: ${NODE_APP:-../../controlfinan-node}
+      dockerfile: Dockerfile.prod
+    image: bench-node
+    cpus: 2
+    mem_limit: 1g
+    environment:
+      DATABASE_URL: postgres://app:app@node-db:5432/controlfinan_node
+      SECRET_KEY_BASE: benchmark-only-secret
+      BCRYPT_COST: 12
+      # Node runs one thread per process: 2 processes (node:cluster), one per CPU, with 5 database connections
+      # each (10 in total, like the others).
+      WEB_CONCURRENCY: 2
+      DB_POOL: 5
+    ports: ["8108:8000"]
+    depends_on: [node-db]
+
+  elixir:
+    build:
+      context: ${ELIXIR_APP:-../../controlfinan-elixir}
+      dockerfile: Dockerfile.prod
+    image: bench-elixir
+    cpus: 2
+    mem_limit: 1g
+    environment:
+      DATABASE_URL: ecto://app:app@elixir-db:5432/controlfinan_elixir
+      SECRET_KEY_BASE: benchmark-only-secret-benchmark-only-secret-benchmark-only-secret-1234
+      BCRYPT_COST: 12
+      # The BEAM runs one scheduler per CPU of the container; up to 10 database connections, like the others.
+      DB_POOL: 10
+    ports: ["8109:8000"]
+    depends_on: [elixir-db]
 
   k6:
     image: grafana/k6:0.54.0
