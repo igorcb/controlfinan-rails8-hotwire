@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# ControlFinan benchmark: Rails 8 + Hotwire (this repo) x Django x Laravel (Octane) x Go x Java x Rust x C#.
-# Usage: ./benchmark/run.sh [apps...] (default: rails django laravel go java rust csharp)
+# ControlFinan benchmark: Rails 8 + Hotwire (this repo) x Django x Laravel (Octane) x Go x Java x Rust x C# x Node.js x Elixir.
+# Usage: ./benchmark/run.sh [apps...] (default: rails django laravel go java rust csharp node elixir)
 # Needs this repo's dev database running (docker compose up db), which provides the shared data
 # (benchmark@exemplo.com and its entries), and the other apps cloned next to this repo:
-# ../controlfinan-django, ../controlfinan-laravel, ../controlfinan-go, ../controlfinan-java, ../controlfinan-rust and ../controlfinan-csharp.
+# ../controlfinan-django, ../controlfinan-laravel, ../controlfinan-go, ../controlfinan-java, ../controlfinan-rust, ../controlfinan-csharp,
+# ../controlfinan-node and ../controlfinan-elixir.
 set -euo pipefail
 cd "$(dirname "$0")"
 RAILS_APP="$(cd .. && pwd)"
@@ -13,10 +14,12 @@ JAVA_APP="$(cd ../../controlfinan-java && pwd)"
 GO_APP="$(cd ../../controlfinan-go && pwd)"
 RUST_APP="$(cd ../../controlfinan-rust && pwd)"
 CSHARP_APP="$(cd ../../controlfinan-csharp && pwd)"
-export RAILS_APP DJANGO_APP LARAVEL_APP JAVA_APP GO_APP RUST_APP CSHARP_APP
+NODE_APP="$(cd ../../controlfinan-node && pwd)"
+ELIXIR_APP="$(cd ../../controlfinan-elixir && pwd)"
+export RAILS_APP DJANGO_APP LARAVEL_APP JAVA_APP GO_APP RUST_APP CSHARP_APP NODE_APP ELIXIR_APP
 RAILS_MASTER_KEY="$(cat "$RAILS_APP/config/master.key")"
 export RAILS_MASTER_KEY
-APPS=("${@:-rails django laravel go java rust csharp}")
+APPS=("${@:-rails django laravel go java rust csharp node elixir}")
 read -r -a APPS <<< "${APPS[*]}"
 RESULTS=results
 mkdir -p "$RESULTS"
@@ -50,6 +53,8 @@ for app in "${APPS[@]}"; do
     java) port=8105; inner=8000; dbname=controlfinan_java ;;
     rust) port=8106; inner=8000; dbname=controlfinan_rust ;;
     csharp) port=8107; inner=8000; dbname=controlfinan_csharp ;;
+    node) port=8108; inner=8000; dbname=controlfinan_node ;;
+    elixir) port=8109; inner=8000; dbname=controlfinan_elixir ;;
   esac
   db="$app-db"
   echo "== $app"

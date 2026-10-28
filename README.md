@@ -113,15 +113,15 @@ docker compose exec web bundle exec rspec
 
 ## Benchmark
 
-O mesmo app foi escrito em sete linguagens, com paridade de telas e regras: Rails (este repositório), [Django](https://github.com/igorcb/controlfinan-django), [Laravel](https://github.com/igorcb/controlfinan-laravel), [Go](https://github.com/igorcb/controlfinan-go), [Java](https://github.com/igorcb/controlfinan-java), [Rust](https://github.com/igorcb/controlfinan-rust) e [C#](https://github.com/igorcb/controlfinan-csharp). As sete foram medidas com os mesmos dados e os mesmos limites (2 CPUs e 1 GB de RAM por app, 20 usuários simultâneos).
+O mesmo app foi escrito em nove linguagens, com paridade de telas e regras: Rails (este repositório), [Django](https://github.com/igorcb/controlfinan-django), [Laravel](https://github.com/igorcb/controlfinan-laravel), [Go](https://github.com/igorcb/controlfinan-go), [Java](https://github.com/igorcb/controlfinan-java), [Rust](https://github.com/igorcb/controlfinan-rust), [C#](https://github.com/igorcb/controlfinan-csharp), [Node.js](https://github.com/igorcb/controlfinan-node) e [Elixir](https://github.com/igorcb/controlfinan-elixir). As nove foram medidas com os mesmos dados e os mesmos limites (2 CPUs e 1 GB de RAM por app, 20 usuários simultâneos).
 
-| Requisições por segundo | Rails | Django | Laravel | Go | Java | Rust | C# |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| Conta Corrente (30 itens + saldo) | 120 | 96 | 128 | **137** | 98 | 104 | 103 |
-| Saldo do dia (filtro) | 247 | 188 | 254 | 2.509 | 211 | 2.763 | **3.070** |
-| Dashboard do mês | 186 | 152 | 251 | **2.074** | 225 | 787 | 1.042 |
-| API JSON (30 itens) | 304 | 267 | 238 | **4.934** | 837 | 2.956 | 1.814 |
-| Criar lançamento (POST) | 372 | 320 | 351 | **5.584** | 4.107 | 3.811 | 3.928 |
+| Requisições por segundo | Rails | Django | Laravel | Go | Java | Rust | C# | Node.js | Elixir |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Conta Corrente (30 itens + saldo) | 120 | 96 | 128 | **137** | 98 | 104 | 103 | 103 | 125 |
+| Saldo do dia (filtro) | 247 | 188 | 254 | 2.509 | 211 | 2.763 | **3.070** | 2.597 | 1.459 |
+| Dashboard do mês | 186 | 152 | 251 | **2.074** | 225 | 787 | 1.042 | 1.544 | 711 |
+| API JSON (30 itens) | 304 | 267 | 238 | **4.934** | 837 | 2.956 | 1.814 | 2.456 | 1.779 |
+| Criar lançamento (POST) | 372 | 320 | 351 | **5.584** | 4.107 | 3.811 | 3.928 | 3.116 | 2.145 |
 
 O método, os recursos (memória, imagem e boot), as conclusões e as lições de medição estão em [benchmark/README.md](benchmark/README.md).
 
